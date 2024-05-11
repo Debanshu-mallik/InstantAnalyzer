@@ -12,7 +12,7 @@ import os
 import pandas as pd
 
 # Load the dataset
-df = pd.read_csv('/content/post_data.csv', parse_dates=['Post Timestamp'])
+df = pd.read_csv('post_data.csv', parse_dates=['Post Timestamp'])
 
 # Specify the username of the user you want to extract data for
 username_to_extract = 'golang.go'

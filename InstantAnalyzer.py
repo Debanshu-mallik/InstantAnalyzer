@@ -5,17 +5,21 @@ import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
 # For example, running this (by clicking run or pressing Shift+Enter) will list all files under the input directory
 
 import os
+import sys
+import json
 #for dirname, _, filenames in os.walk('/kaggle/input'):
     #for filename in filenames:
         #print(os.path.join(dirname, filename))
 
-import pandas as pd
 
 # Load the dataset
 df = pd.read_csv('post_data.csv', parse_dates=['Post Timestamp'])
 
 # Specify the username of the user you want to extract data for
-username_to_extract = 'golang.go'
+request_body = sys.stdin.read()
+data = json.loads(request_body)
+username_to_extract = data.get('username')
+
 
 # Filter the DataFrame to get data for the specified user
 data = df[df['Username'] == username_to_extract]

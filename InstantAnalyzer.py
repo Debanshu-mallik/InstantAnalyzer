@@ -194,20 +194,20 @@ data['date'] = data['created_at'].dt.date  # Extract date from datetime
 sentiment_by_date = data.groupby(['date', 'sentiment']).size().unstack(fill_value=0)
 
 # Convert sentiment_by_date DataFrame to long format for Plotly
-sentiment_by_date_long = sentiment_by_date.reset_index().melt(id_vars='date', var_name='sentiment', value_name='count')
+sentiment_by_date_long_r = sentiment_by_date.reset_index().melt(id_vars='date', var_name='sentiment', value_name='count')
 
 # Merge the caption text based on date and sentiment
-sentiment_by_date_long = sentiment_by_date_long.merge(data[['date', 'sentiment', 'Post Content']], on=['date', 'sentiment'], how='left')
+sentiment_by_date_long_r = sentiment_by_date_long.merge(data[['date', 'sentiment', 'Post Content']], on=['date', 'sentiment'], how='left')
 
 # Create hover text including caption text
-sentiment_by_date_long['hover_text'] = sentiment_by_date_long.apply(lambda x: f"Date: {x['date']}<br>" \
+sentiment_by_date_long_r['hover_text'] = sentiment_by_date_long_r.apply(lambda x: f"Date: {x['date']}<br>" \
                                                                         f"Sentiment: {x['sentiment']}<br>" \
                                                                         f"Count: {x['count']}<br>" \
                                                                         f"Caption: {x['Post Content']}",
                                                                     axis=1)
 
 # Create an interactive line plot using Plotly
-fig = px.line(sentiment_by_date_long, x='date', y='count', color='sentiment', title='Sentiment Trends Over Time',
+fig = px.line(sentiment_by_date_long_r, x='date', y='count', color='sentiment', title='Sentiment Trends Over Time',
               labels={'count': 'Number of Captions'}, hover_name='sentiment', hover_data={'hover_text'})
 fig.update_traces(mode='markers+lines', hoverinfo='text')
 fig.show()

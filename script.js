@@ -5,7 +5,7 @@ document.getElementById("usernameForm").addEventListener("submit", function(even
   var username = document.getElementById("username").value;
 
   // Send the username value to the Python script using fetch API
-  fetch("/path/to/InstantAnalyzer.py", {
+  fetch("InstantAnalyzer.py", {
     method: "POST",
     body: JSON.stringify({ username: username }),
     headers: {

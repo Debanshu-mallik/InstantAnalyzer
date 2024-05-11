@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results</title>
+    <!-- Include any CSS stylesheets or meta tags here -->
+</head>
+<body>
+    <div class="container">
+        <div class="title">Instagram Analyzer Results</div>
+        <!-- Results display area -->
+        <div id="results"></div>
+    </div>
+
+    <!-- JavaScript code -->
+    <script>
+        // Function to fetch data from the InstantAnalyzer.py file
+        function fetchDataFromPython() {
+            // Make an AJAX request
+            fetch('InstantAnalyzer.py')
+                .then(response => {
+                    // Check if the response is successful
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    // Parse the JSON response
+                    return response.json();
+                })
+                .then(data => {
+                    // Process the fetched data and update the HTML
+                    const resultsDiv = document.getElementById('results');
+                    // Clear any existing content
+                    resultsDiv.innerHTML = '';
+                    // Create new HTML content with the fetched data
+                    const htmlContent = `
+                        <h2>Sentiment of the Caption:</h2>
+                        <div>${data.captionSentiment}</div>
+                        <h2>Sentiment by Categories:</h2>
+                        <div>${data.sentimentByCategories}</div>
+                        <h2>Sentiment by Date:</h2>
+                        <div>${data.sentiment_by_date_long}</div>
+                    `;
+                    // Set the HTML content of the results div
+                    resultsDiv.innerHTML = htmlContent;
+                })
+                .catch(error => {
+                    // Handle errors
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+        }
+
+        // Call the function to fetch data when the document is ready
+        document.addEventListener('DOMContentLoaded', fetchDataFromPython);
+    </script>
+</body>
+</html>

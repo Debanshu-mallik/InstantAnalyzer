@@ -1,31 +1,28 @@
-  <script>
-    document.getElementById('usernameForm').addEventListener('submit', function(event) {
-      event.preventDefault();
-      const username = document.getElementById('username').value;
-  
-      // Send the username to the server for data fetching
-      fetch('/analyze', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ username: username })
-      })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        // Redirect to result.html after getting the analysis
-        window.location.href = 'result.html';
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        // Handle errors
-      });
-    });
+document.getElementById("usernameForm").addEventListener("submit", function(event) {
+  event.preventDefault(); // Prevent form submission
 
-    // Assuming backend.js contains the analysis code
-    // Load backend.js dynamically
-    const script = document.createElement('script');
-    script.src = 'backend.js';
-    document.body.appendChild(script);
-</script>
+  // Get the value entered in the input field
+  var username = document.getElementById("username").value;
+
+  // Send the username value to the Python script using fetch API
+  fetch("/path/to/InstantAnalyzer.py", {
+    method: "POST",
+    body: JSON.stringify({ username: username }),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    return response.text();
+  })
+  .then(data => {
+    // Redirect to results.html with the username as query parameter
+    window.location.href = `/results.html?username=${encodeURIComponent(username)}`;
+  })
+  .catch(error => {
+    console.error("There was a problem with the fetch operation:", error);
+  });
+});

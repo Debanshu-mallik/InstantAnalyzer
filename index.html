@@ -1,57 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Instagram Analyzer</title>
-  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Roboto', sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-    .container {
-      max-width: 600px;
-      margin: 50px auto;
-      text-align: center;
-    }
-    .title {
-      font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 20px;
-    }
-    .input-field {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 20px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      box-sizing: border-box;
-      font-size: 16px;
-    }
-    .submit-btn {
-      background-color: #4CAF50;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-    .submit-btn:hover {
-      background-color: #45a049;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <div class="title">Instagram Analyzer</div>
-    <form id="usernameForm">
-      <input type="text" id="username" class="input-field" placeholder="Enter Instagram username">
-      <button type="submit" class="submit-btn">Submit</button>
-    </form>
-  </div>
-  
-</body>
-</html>
+    <script>
+        // Function to show the loading spinner
+        function showLoader() {
+            document.getElementById('loader').classList.remove('hidden');
+        }
+
+        // Function to hide the loading spinner
+        function hideLoader() {
+            document.getElementById('loader').classList.add('hidden');
+        }
+
+        // Add submit event listener to the form
+        document.getElementById("usernameForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent form submission
+
+            // Get the value entered in the input field
+            var username = document.getElementById("username").value;
+
+            // Show the loading spinner
+            showLoader();
+
+            // Send the username value to the Python script using fetch API
+            fetch("InstantAnalyzer.py", {
+                method: "POST",
+                body: JSON.stringify({ username: username }),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.text();
+            })
+            .then(data => {
+                // Hide the loading spinner
+                hideLoader();
+
+                // Redirect to results.html with the username as query parameter
+                window.location.href = `/results.html?username=${encodeURIComponent(username)}`;
+            })
+            .catch(error => {
+                console.error("There was a problem with the fetch operation:", error);
+                // Hide the loading spinner in case of error
+                hideLoader();
+            });
+        });
+    </script>
